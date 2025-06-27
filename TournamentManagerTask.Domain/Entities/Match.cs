@@ -1,4 +1,5 @@
 using TournamentManagerTask.Domain.Enums;
+using TournamentManagerTask.Domain.Exceptions;
 
 namespace TournamentManagerTask.Domain.Entities;
 
@@ -17,17 +18,16 @@ public class Match
         TeamA = teamA;
         TeamB = teamB;
     }
-
     public void Finish(FinishResult result, Team? winningTeam = null)
     {
         if (State == MatchState.Finished)
-            throw new InvalidOperationException("Match already finished");
+            throw new InvalidDomainOperationException("Match already finished");
 
         switch (result)
         {
             case FinishResult.Winner:
                 if (winningTeam == null || (winningTeam != TeamA && winningTeam != TeamB))
-                    throw new ArgumentException("Invalid winner");
+                    throw new DomainValidationException("Invalid winner");
                 Winner = winningTeam;
                 break;
 

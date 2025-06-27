@@ -1,3 +1,5 @@
+using TournamentManagerTask.Domain.Exceptions;
+
 namespace TournamentManagerTask.Domain.Entities;
 
 public class Team
@@ -7,6 +9,9 @@ public class Team
 
     public Team(string name)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new DomainValidationException("Team name cannot be empty");
+
         Name = name;
     }
 }

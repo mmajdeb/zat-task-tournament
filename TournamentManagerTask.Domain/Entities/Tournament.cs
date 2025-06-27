@@ -1,3 +1,5 @@
+using TournamentManagerTask.Domain.Exceptions;
+
 namespace TournamentManagerTask.Domain.Entities;
 
 public class Tournament
@@ -9,12 +11,14 @@ public class Tournament
 
     private Tournament(string name)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new DomainValidationException("Tournament name cannot be empty");
+
         Name = name;
     }
-
     public static Tournament Create(string name, int teamsCount, List<string> teamNames)
     {
-        if (teamsCount < 2) throw new ArgumentException("At least 2 teams are required");
+        if (teamsCount < 2) throw new DomainValidationException("At least 2 teams are required");
 
         var tournament = new Tournament(name);
         tournament.Teams = teamNames.Select(name => new Team(name)).ToList();
