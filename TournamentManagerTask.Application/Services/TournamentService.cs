@@ -14,9 +14,9 @@ public class TournamentService : ITournamentService
         _repository = repository;
     }
 
-    public async Task<Guid> CreateTournamentAsync(string name, List<string> teamNames)
+    public async Task<Guid> CreateTournamentAsync(string name, int teamsCount)
     {
-        var tournament = Tournament.Create(name, teamNames.Count, teamNames);
+        var tournament = Tournament.Create(name, teamsCount);
         await _repository.CreateAsync(tournament);
         return tournament.Id;
     }
@@ -33,11 +33,11 @@ public class TournamentService : ITournamentService
             Matches = tournament.Matches.Select(m => new MatchDto
             {
                 Id = m.Id,
-                TeamA = m.TeamA?.Name,
-                TeamB = m.TeamB?.Name,
+                TeamA = m.TeamA,
+                TeamB = m.TeamB,
                 Round = m.Round,
                 State = m.State.ToString(),
-                Winner = m.Winner?.Name
+                Winner = m.Winner
             }).ToList()
         };
     }

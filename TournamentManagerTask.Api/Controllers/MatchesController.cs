@@ -24,7 +24,7 @@ public class MatchesController : ControllerBase
         var result = new FinishResultDto
         {
             Result = request.Result,
-            WinningTeamId = request.WinningTeamId
+            WinningTeam = request.WinningTeam
         };
 
         await _matchService.FinishMatchAsync(matchId, result);

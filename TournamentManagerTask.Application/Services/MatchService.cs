@@ -1,7 +1,6 @@
 using TournamentManagerTask.Application.DTOs;
 using TournamentManagerTask.Application.Exceptions;
 using TournamentManagerTask.Application.Interfaces;
-using TournamentManagerTask.Domain.Entities;
 using TournamentManagerTask.Domain.Enums;
 
 namespace TournamentManagerTask.Application.Services;
@@ -21,9 +20,7 @@ public class MatchService : IMatchService
         if (tournament == null)
             throw new MatchNotFoundException(matchId);
 
-        var match = tournament.Matches.First(m => m.Id == matchId);
-
-        FinishResult result = input.Result switch
+        var match = tournament.Matches.First(m => m.Id == matchId); FinishResult result = input.Result switch
         {
             "Winner" => FinishResult.Winner,
             "WithdrawOne" => FinishResult.WithdrawOne,
@@ -31,12 +28,15 @@ public class MatchService : IMatchService
             _ => throw new InvalidInputException($"Invalid result type: '{input.Result}'. Valid values are: Winner, WithdrawOne, WithdrawBoth", nameof(input.Result))
         };
 
-        Team? winner = input.WinningTeamId.HasValue
-            ? tournament.Teams.FirstOrDefault(t => t.Id == input.WinningTeamId.Value)
+        string? winner = !string.IsNullOrEmpty(input.WinningTeam)
+            ? tournament.Teams.FirstOrDefault(t => t == input.WinningTeam)
             : null;
 
         match.Finish(result, winner);
 
-        await _repository.UpdateMatchResultAsync(matchId, match.State.ToString(), match.Winner?.Id);
+        await _repository.UpdateMatchResultAsync(matchId, match.State.ToString(), match.Winner);
+
+        if (match.NextMatch != null)
+            await _repository.UpdateNextMatchTeamsAsync(match.NextMatch.Id, match.NextMatch.TeamA, match.NextMatch.TeamB);
     }
 }

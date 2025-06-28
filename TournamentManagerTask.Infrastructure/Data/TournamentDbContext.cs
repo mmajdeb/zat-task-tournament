@@ -8,7 +8,6 @@ public class TournamentDbContext : DbContext
     public TournamentDbContext(DbContextOptions<TournamentDbContext> options) : base(options) { }
 
     public DbSet<TournamentEntity> Tournaments => Set<TournamentEntity>();
-    public DbSet<TeamEntity> Teams => Set<TeamEntity>();
     public DbSet<MatchEntity> Matches => Set<MatchEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -21,7 +21,7 @@ public class TournamentsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTournament(CreateTournamentRequest request)
     {
-        var id = await _tournamentService.CreateTournamentAsync(request.Name, request.TeamNames);
+        var id = await _tournamentService.CreateTournamentAsync(request.Name, request.TeamsCount);
         return CreatedAtAction(nameof(GetTournament), new { tournamentId = id }, new { Id = id });
     }
 

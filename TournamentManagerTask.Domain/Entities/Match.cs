@@ -6,16 +6,16 @@ namespace TournamentManagerTask.Domain.Entities;
 public class Match
 {
     public Guid Id { get; private set; } = Guid.NewGuid();
-    public Team? TeamA { get; private set; }
-    public Team? TeamB { get; private set; }
+    public string? TeamA { get; private set; }
+    public string? TeamB { get; private set; }
     public int Round { get; private set; }
     public MatchState State { get; private set; } = MatchState.Pending;
-    public Team? Winner { get; private set; }
+    public string? Winner { get; private set; }
 
     public Match? NextMatch { get; set; }
     public bool IsTeamAInNextMatchSlot { get; set; }
 
-    public Match(int round, Team? teamA, Team? teamB)
+    public Match(int round, string? teamA, string? teamB)
     {
         Round = round;
         TeamA = teamA;
@@ -23,7 +23,7 @@ public class Match
     }
 
     // Constructor for reconstruction from persistence - internal access only
-    internal Match(Guid id, int round, Team? teamA, Team? teamB, MatchState state, Team? winner)
+    internal Match(Guid id, int round, string? teamA, string? teamB, MatchState state, string? winner)
     {
         Id = id;
         Round = round;
@@ -33,7 +33,7 @@ public class Match
         Winner = winner;
     }
 
-    public void Finish(FinishResult result, Team? winningTeam = null)
+    public void Finish(FinishResult result, string? winningTeam = null)
     {
         if (State == MatchState.Finished)
             throw new InvalidDomainOperationException("Match already finished");
@@ -47,7 +47,7 @@ public class Match
                 break;
 
             case FinishResult.WithdrawOne:
-                Winner = TeamA != null && TeamB == null ? TeamA : TeamB;
+                Winner = !string.IsNullOrEmpty(TeamA) && string.IsNullOrEmpty(TeamB) ? TeamA : TeamB;
                 break;
 
             case FinishResult.WithdrawBoth:
@@ -66,6 +66,6 @@ public class Match
         }
     }
 
-    public void AssignTeamA(Team team) => TeamA = team;
-    public void AssignTeamB(Team team) => TeamB = team;
+    public void AssignTeamA(string team) => TeamA = team;
+    public void AssignTeamB(string team) => TeamB = team;
 }

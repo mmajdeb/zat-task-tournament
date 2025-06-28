@@ -15,16 +15,11 @@ public class TournamentRepository : ITournamentRepository
     {
         _context = context;
     }
+
     public async Task<Tournament?> GetByIdAsync(Guid id)
     {
         var entity = await _context.Tournaments
-            .Include(t => t.Teams)
             .Include(t => t.Matches)
-            .ThenInclude(m => m.TeamA)
-            .Include(t => t.Matches)
-            .ThenInclude(m => m.TeamB)
-            .Include(t => t.Matches)
-            .ThenInclude(m => m.Winner)
             .FirstOrDefaultAsync(t => t.Id == id);
 
         return MapToDomain(entity);
@@ -33,17 +28,12 @@ public class TournamentRepository : ITournamentRepository
     public async Task<Tournament?> FindByMatchIdAsync(Guid matchId)
     {
         var entity = await _context.Tournaments
-            .Include(t => t.Teams)
             .Include(t => t.Matches)
-            .ThenInclude(m => m.TeamA)
-            .Include(t => t.Matches)
-            .ThenInclude(m => m.TeamB)
-            .Include(t => t.Matches)
-            .ThenInclude(m => m.Winner)
             .FirstOrDefaultAsync(t => t.Matches.Any(m => m.Id == matchId));
 
         return MapToDomain(entity);
     }
+
     public async Task<Tournament> CreateAsync(Tournament domain)
     {
         var entity = MapToEntity(domain);
@@ -52,11 +42,26 @@ public class TournamentRepository : ITournamentRepository
         return MapToDomain(entity)!;
     }
 
-    public async Task UpdateMatchResultAsync(Guid matchId, string state, Guid? winnerId)
+    public async Task UpdateMatchResultAsync(Guid matchId, string state, string? winner)
     {
-        var matchEntity = await _context.Matches.FirstAsync(m => m.Id == matchId);
-        matchEntity.State = state;
-        matchEntity.WinnerId = winnerId;
+        var matchEntity = await _context.Matches.FindAsync(matchId);
+        if (matchEntity != null)
+        {
+            matchEntity.State = state;
+            matchEntity.Winner = winner;
+
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task UpdateNextMatchTeamsAsync(Guid matchId, string? teamA, string? teamB)
+    {
+        var nextMatch = await _context.Matches.FindAsync(matchId);
+        if (nextMatch != null)
+        {
+            nextMatch.TeamA = teamA;
+            nextMatch.TeamB = teamB;
+        }
 
         await _context.SaveChangesAsync();
     }
@@ -65,35 +70,20 @@ public class TournamentRepository : ITournamentRepository
     {
         if (entity == null) return null;
 
-        // Create teams dictionary for quick lookup during match mapping
-        var teamLookup = entity.Teams.ToDictionary(t => t.Id, t => new Team(t.Id, t.Name));
-
         // Map matches
-        var matches = entity.Matches.Select(m =>
-        {
-            var teamA = m.TeamAId.HasValue && teamLookup.ContainsKey(m.TeamAId.Value)
-                ? teamLookup[m.TeamAId.Value]
-                : null;
-            var teamB = m.TeamBId.HasValue && teamLookup.ContainsKey(m.TeamBId.Value)
-                ? teamLookup[m.TeamBId.Value]
-                : null;
-            var winner = m.WinnerId.HasValue && teamLookup.ContainsKey(m.WinnerId.Value)
-                ? teamLookup[m.WinnerId.Value]
-                : null;
-            return new Match(
-                    m.Id,
-                    m.Round,
-                    teamA,
-                    teamB,
-                    Enum.Parse<MatchState>(m.State),
-                    winner
-                );
-        }).ToList();
+        var matches = entity.Matches.Select(m => new Match(
+            m.Id,
+            m.Round,
+            m.TeamA,
+            m.TeamB,
+            Enum.Parse<MatchState>(m.State),
+            m.Winner
+        )).ToList();
 
         return new Tournament(
             entity.Id,
             entity.Name,
-            teamLookup.Values.ToList(),
+            entity.Teams,
             matches
         );
     }
@@ -104,15 +94,15 @@ public class TournamentRepository : ITournamentRepository
         {
             Id = domain.Id,
             Name = domain.Name,
-            Teams = domain.Teams.Select(t => new TeamEntity { Id = t.Id, Name = t.Name, TournamentId = domain.Id }).ToList(),
+            Teams = domain.Teams,
             Matches = domain.Matches.Select(m => new MatchEntity
             {
                 Id = m.Id,
                 Round = m.Round,
                 State = m.State.ToString(),
-                TeamAId = m.TeamA?.Id,
-                TeamBId = m.TeamB?.Id,
-                WinnerId = m.Winner?.Id,
+                TeamA = m.TeamA,
+                TeamB = m.TeamB,
+                Winner = m.Winner,
                 TournamentId = domain.Id
             }).ToList()
         };

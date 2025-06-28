@@ -10,9 +10,10 @@ public class TournamentConfig : IEntityTypeConfiguration<TournamentEntity>
     {
         builder.HasKey(t => t.Id);
         builder.Property(t => t.Name).IsRequired();
-        builder.HasMany(t => t.Teams)
-               .WithOne(t => t.Tournament)
-               .HasForeignKey(t => t.TournamentId);
+        builder.Property(t => t.Teams)
+               .HasConversion(
+                   v => string.Join(',', v),
+                   v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
         builder.HasMany(t => t.Matches)
                .WithOne(m => m.Tournament)
                .HasForeignKey(m => m.TournamentId);
