@@ -13,5 +13,7 @@ public class MatchConfig : IEntityTypeConfiguration<MatchEntity>
               builder.Property(m => m.TeamA);
               builder.Property(m => m.TeamB);
               builder.Property(m => m.Winner);
+              builder.Property(m => m.NextMatchId);
+              builder.Property(m => m.IsTeamAInNextMatchSlot);
        }
 }

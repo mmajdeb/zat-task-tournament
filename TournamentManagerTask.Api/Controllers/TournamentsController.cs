@@ -52,7 +52,8 @@ public class TournamentsController : ControllerBase
                 State = m.State,
                 TeamA = m.TeamA,
                 TeamB = m.TeamB,
-                Winner = m.Winner
+                Winner = m.Winner,
+                NextMatchId = m.NextMatchId
             }).ToList()
         };
 

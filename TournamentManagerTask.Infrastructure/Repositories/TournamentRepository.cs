@@ -121,20 +121,37 @@ public class TournamentRepository : ITournamentRepository
             _logger.LogWarning("Next match not found for update: {MatchId}", matchId);
         }
     }
-
     private Tournament? MapToDomain(TournamentEntity? entity)
     {
         if (entity == null) return null;
 
-        // Map matches
-        var matches = entity.Matches.Select(m => new Match(
-            m.Id,
-            m.Round,
-            m.TeamA,
-            m.TeamB,
-            Enum.Parse<MatchState>(m.State),
-            m.Winner
-        )).ToList();
+        // First pass: Create all matches without NextMatch relationships
+        var matchesDict = entity.Matches.ToDictionary(
+            me => me.Id,
+            me => new Match(
+                me.Id,
+                me.Round,
+                me.TeamA,
+                me.TeamB,
+                Enum.Parse<MatchState>(me.State),
+                me.Winner
+            )
+        );
+
+        // Second pass: Set up NextMatch relationships
+        foreach (var matchEntity in entity.Matches)
+        {
+            if (matchEntity.NextMatchId.HasValue && matchesDict.ContainsKey(matchEntity.NextMatchId.Value))
+            {
+                var match = matchesDict[matchEntity.Id];
+                var nextMatch = matchesDict[matchEntity.NextMatchId.Value];
+
+                match.NextMatch = nextMatch;
+                match.IsTeamAInNextMatchSlot = matchEntity.IsTeamAInNextMatchSlot;
+            }
+        }
+
+        var matches = matchesDict.Values.ToList();
 
         return new Tournament(
             entity.Id,
@@ -159,6 +176,8 @@ public class TournamentRepository : ITournamentRepository
                 TeamA = m.TeamA,
                 TeamB = m.TeamB,
                 Winner = m.Winner,
+                NextMatchId = m.NextMatch?.Id,
+                IsTeamAInNextMatchSlot = m.IsTeamAInNextMatchSlot,
                 TournamentId = domain.Id
             }).ToList()
         };

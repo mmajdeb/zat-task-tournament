@@ -56,7 +56,8 @@ public class TournamentService : ITournamentService
                 TeamB = m.TeamB,
                 Round = m.Round,
                 State = m.State.ToString(),
-                Winner = m.Winner
+                Winner = m.Winner,
+                NextMatchId = m.NextMatch?.Id,
             }).ToList()
         };
     }

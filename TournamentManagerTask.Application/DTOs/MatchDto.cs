@@ -10,4 +10,5 @@ public class MatchDto
     public string State { get; set; } = MatchState.Pending.ToString();
     public string? Winner { get; set; }
     public int Round { get; set; }
+    public Guid? NextMatchId { get; set; }
 }

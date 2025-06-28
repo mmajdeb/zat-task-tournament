@@ -17,4 +17,5 @@ public class MatchResponse
     public string State { get; set; }
     public string? Winner { get; set; }
     public int Round { get; set; }
+    public Guid? NextMatchId { get; set; }
 }
