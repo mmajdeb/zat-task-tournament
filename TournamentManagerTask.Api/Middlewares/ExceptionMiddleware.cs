@@ -101,7 +101,7 @@ public class ExceptionMiddleware
             ),
 
             InvalidDomainOperationException invalidDomainOperation => (
-                (int)HttpStatusCode.BadRequest,
+                (int)HttpStatusCode.Conflict,
                 invalidDomainOperation.Message,
                 new { }
             ),
