@@ -35,13 +35,13 @@ public class MatchResponse
     /// Name of the first team
     /// </summary>
     /// <example>Team Alpha</example>
-    public string? TeamA { get; set; }
+    public string TeamA { get; set; }
 
     /// <summary>
     /// Name of the second team
     /// </summary>
     /// <example>Team Beta</example>
-    public string? TeamB { get; set; }
+    public string TeamB { get; set; }
 
     /// <summary>
     /// Current state of the match. Valid values: "Pending", "Finished"
@@ -53,7 +53,7 @@ public class MatchResponse
     /// Name of the winning team (only set when match is finished)
     /// </summary>
     /// <example>Team Alpha</example>
-    public string? Winner { get; set; }
+    public string Winner { get; set; }
 
     /// <summary>
     /// Tournament round number (1 = first round, 2 = second round, etc.)
