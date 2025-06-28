@@ -17,7 +17,7 @@ public class TournamentService : ITournamentService
     public async Task<Guid> CreateTournamentAsync(string name, List<string> teamNames)
     {
         var tournament = Tournament.Create(name, teamNames.Count, teamNames);
-        await _repository.SaveAsync(tournament);
+        await _repository.CreateAsync(tournament);
         return tournament.Id;
     }
 

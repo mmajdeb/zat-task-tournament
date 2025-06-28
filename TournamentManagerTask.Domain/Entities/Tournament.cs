@@ -12,10 +12,21 @@ public class Tournament
     private Tournament(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
+            throw new DomainValidationException("Tournament name cannot be empty"); Name = name;
+    }
+
+    // Constructor for reconstruction from persistence - internal access only
+    internal Tournament(Guid id, string name, List<Team> teams, List<Match> matches)
+    {
+        if (string.IsNullOrWhiteSpace(name))
             throw new DomainValidationException("Tournament name cannot be empty");
 
+        Id = id;
         Name = name;
+        Teams = teams;
+        Matches = matches;
     }
+
     public static Tournament Create(string name, int teamsCount, List<string> teamNames)
     {
         if (teamsCount < 2) throw new DomainValidationException("At least 2 teams are required");

@@ -37,6 +37,6 @@ public class MatchService : IMatchService
 
         match.Finish(result, winner);
 
-        await _repository.SaveAsync(tournament);
+        await _repository.UpdateMatchResultAsync(matchId, match.State.ToString(), match.Winner?.Id);
     }
 }

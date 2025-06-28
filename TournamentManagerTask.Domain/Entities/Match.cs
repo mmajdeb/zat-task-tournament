@@ -18,6 +18,18 @@ public class Match
         TeamA = teamA;
         TeamB = teamB;
     }
+
+    // Constructor for reconstruction from persistence - internal access only
+    internal Match(Guid id, int round, Team? teamA, Team? teamB, MatchState state, Team? winner)
+    {
+        Id = id;
+        Round = round;
+        TeamA = teamA;
+        TeamB = teamB;
+        State = state;
+        Winner = winner;
+    }
+
     public void Finish(FinishResult result, Team? winningTeam = null)
     {
         if (State == MatchState.Finished)
