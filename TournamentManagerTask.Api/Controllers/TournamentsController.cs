@@ -36,7 +36,7 @@ public class TournamentsController : ControllerBase
     [ProducesResponseType(typeof(CreateTournamentResponse), 201)]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> CreateTournament(CreateTournamentRequest request)
+    public async Task<IActionResult> CreateTournament([FromBody] CreateTournamentRequest request)
     {
         _logger.LogInformation("Creating tournament with name: {TournamentName}, teams count: {TeamsCount}",
             request.Name, request.TeamsCount);

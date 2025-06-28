@@ -10,7 +10,7 @@ public class CreateTournamentRequest
     /// <summary>
     /// The name of the tournament
     /// </summary>
-    /// <example>World Championship 2024</example>
+    /// <example>Saudi Pro League Championship</example>
     public string Name { get; set; } = string.Empty;
 
     /// <summary>

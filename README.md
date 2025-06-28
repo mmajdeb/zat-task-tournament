@@ -83,7 +83,7 @@ The API will be available at `https://localhost:5001` or `http://localhost:5000`
 - **Request Body:**
   ```json
   {
-    "name": "World Championship 2024",
+    "name": "Saudi Pro League Championship",
     "teamsCount": 8
   }
   ```
@@ -107,7 +107,7 @@ The API will be available at `https://localhost:5001` or `http://localhost:5000`
   - `200 OK` with body:
     ```json
     {
-      "name": "World Championship 2024",
+      "name": "Saudi Pro League Championship",
       "matches": [
         {
           "matchId": "<match-guid>",

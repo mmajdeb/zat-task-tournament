@@ -46,7 +46,7 @@ public class MatchesController : ControllerBase
     [ProducesResponseType(404)]
     [ProducesResponseType(409)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> FinishMatch(Guid matchId, FinishMatchRequest request)
+    public async Task<IActionResult> FinishMatch(Guid matchId, [FromBody] FinishMatchRequest request)
     {
         _logger.LogInformation("Finishing match {MatchId} with result: {Result}, winning team: {WinningTeam}",
             matchId, request.Result, request.WinningTeam);
