@@ -12,6 +12,9 @@ public class Match
     public MatchState State { get; private set; } = MatchState.Pending;
     public Team? Winner { get; private set; }
 
+    public Match? NextMatch { get; set; }
+    public bool IsTeamAInNextMatchSlot { get; set; }
+
     public Match(int round, Team? teamA, Team? teamB)
     {
         Round = round;
@@ -53,5 +56,16 @@ public class Match
         }
 
         State = MatchState.Finished;
+
+        if (NextMatch != null && Winner != null)
+        {
+            if (IsTeamAInNextMatchSlot)
+                NextMatch.AssignTeamA(Winner);
+            else
+                NextMatch.AssignTeamB(Winner);
+        }
     }
+
+    public void AssignTeamA(Team team) => TeamA = team;
+    public void AssignTeamB(Team team) => TeamB = team;
 }

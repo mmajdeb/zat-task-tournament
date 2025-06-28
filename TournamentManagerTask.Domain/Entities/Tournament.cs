@@ -34,6 +34,86 @@ public class Tournament
         var tournament = new Tournament(name);
         tournament.Teams = teamNames.Select(name => new Team(name)).ToList();
 
+        tournament.Matches = GenerateBracket(tournament.Teams);
+
         return tournament;
+    }
+    private static List<Match> GenerateBracket(List<Team> teams)
+    {
+        int totalTeams = teams.Count;
+        int nextPowerOf2 = 1;
+        while (nextPowerOf2 < totalTeams) nextPowerOf2 <<= 1;
+
+        int totalMatches = nextPowerOf2 - 1;
+        var matches = new Match[totalMatches];
+
+        // Assign round numbers manually
+        int[] matchRounds = CalculateMatchRounds(nextPowerOf2);
+        for (int i = 0; i < totalMatches; i++)
+        {
+            matches[i] = new Match(matchRounds[i], null, null);
+        }
+
+        // Link matches
+        int offset = 0;
+        int roundSize = nextPowerOf2 / 2;
+        while (roundSize > 0)
+        {
+            for (int i = 0; i < roundSize; i++)
+            {
+                int left = offset + i * 2;
+                int right = offset + i * 2 + 1;
+                int parent = offset + roundSize + i;
+
+                if (parent < totalMatches)
+                {
+                    matches[left].NextMatch = matches[parent];
+                    matches[left].IsTeamAInNextMatchSlot = true;
+
+                    matches[right].NextMatch = matches[parent];
+                    matches[right].IsTeamAInNextMatchSlot = false;
+                }
+            }
+            offset += roundSize;
+            roundSize /= 2;
+        }
+
+        // Assign teams to first round matches
+        int firstRoundMatches = nextPowerOf2 / 2;
+        for (int i = 0; i < teams.Count; i++)
+        {
+            int matchIndex = i / 2;
+            if (matchIndex < firstRoundMatches)
+            {
+                var match = matches[matchIndex];
+                if (i % 2 == 0)
+                    match.AssignTeamA(teams[i]);
+                else
+                    match.AssignTeamB(teams[i]);
+            }
+        }
+
+        return matches.ToList();
+    }
+
+    private static int[] CalculateMatchRounds(int totalSlots)
+    {
+        int totalMatches = totalSlots - 1;
+        int[] rounds = new int[totalMatches];
+        int round = 1;
+        int matchesInRound = totalSlots / 2;
+        int index = 0;
+
+        while (matchesInRound > 0)
+        {
+            for (int i = 0; i < matchesInRound; i++)
+            {
+                rounds[index++] = round;
+            }
+            round++;
+            matchesInRound /= 2;
+        }
+
+        return rounds;
     }
 }
