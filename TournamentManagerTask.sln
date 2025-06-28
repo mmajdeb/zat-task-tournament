@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentManagerTask.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentManagerTask.Application", "TournamentManagerTask.Application\TournamentManagerTask.Application.csproj", "{83047156-C86C-4B17-87D0-07069C05BB68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TournamentManagerTask.Infrastructure", "TournamentManagerTask.Infrastructure\TournamentManagerTask.Infrastructure.csproj", "{A1B2C3D4-E5F6-7890-ABCD-123456789012}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,11 +27,15 @@ Global
 		{B8C4F5D2-9E3A-4B7F-8D6C-1A2B3C4D5E6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8C4F5D2-9E3A-4B7F-8D6C-1A2B3C4D5E6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8C4F5D2-9E3A-4B7F-8D6C-1A2B3C4D5E6F}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
+	EndGlobalSection	
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{83047156-C86C-4B17-87D0-07069C05BB68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{83047156-C86C-4B17-87D0-07069C05BB68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83047156-C86C-4B17-87D0-07069C05BB68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83047156-C86C-4B17-87D0-07069C05BB68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-123456789012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-123456789012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-123456789012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-7890-ABCD-123456789012}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
