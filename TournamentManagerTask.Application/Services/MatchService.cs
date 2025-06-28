@@ -1,4 +1,5 @@
 using TournamentManagerTask.Application.DTOs;
+using TournamentManagerTask.Application.Exceptions;
 using TournamentManagerTask.Application.Interfaces;
 using TournamentManagerTask.Domain.Entities;
 using TournamentManagerTask.Domain.Enums;
@@ -18,7 +19,7 @@ public class MatchService : IMatchService
     {
         var tournament = await _repository.FindByMatchIdAsync(matchId);
         if (tournament == null)
-            throw new InvalidOperationException($"No tournament found containing match with ID {matchId}");
+            throw new MatchNotFoundException(matchId);
 
         var match = tournament.Matches.First(m => m.Id == matchId);
 
@@ -27,7 +28,7 @@ public class MatchService : IMatchService
             "Winner" => FinishResult.Winner,
             "WithdrawOne" => FinishResult.WithdrawOne,
             "WithdrawBoth" => FinishResult.WithdrawBoth,
-            _ => throw new ArgumentException("Invalid result type")
+            _ => throw new InvalidInputException($"Invalid result type: '{input.Result}'. Valid values are: Winner, WithdrawOne, WithdrawBoth", nameof(input.Result))
         };
 
         Team? winner = input.WinningTeamId.HasValue

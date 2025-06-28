@@ -1,4 +1,5 @@
 using TournamentManagerTask.Application.DTOs;
+using TournamentManagerTask.Application.Exceptions;
 using TournamentManagerTask.Application.Interfaces;
 using TournamentManagerTask.Domain.Entities;
 
@@ -24,7 +25,7 @@ public class TournamentService : ITournamentService
     {
         var tournament = await _repository.GetByIdAsync(tournamentId);
         if (tournament == null)
-            throw new InvalidOperationException($"Tournament with ID {tournamentId} not found");
+            throw new TournamentNotFoundException(tournamentId);
 
         return new TournamentDto
         {
