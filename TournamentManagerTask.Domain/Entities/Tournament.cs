@@ -72,6 +72,7 @@ public class Tournament
                 int right = offset + i * 2 + 1;
                 int parent = offset + roundSize + i;
 
+                Console.WriteLine($"Linking matches: left={left}, right={right}, parent={parent}");
                 if (parent < totalMatches)
                 {
                     matches[left].NextMatch = matches[parent];

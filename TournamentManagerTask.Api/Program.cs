@@ -5,8 +5,14 @@ using FluentValidation;
 using TournamentManagerTask.Api.Middlewares;
 using TournamentManagerTask.Infrastructure;
 using TournamentManagerTask.Application;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -43,6 +49,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseRequestLogging();
 app.UseCustomExceptionHandler();
 app.UseHttpsRedirection();
 app.UseAuthorization();
