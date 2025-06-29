@@ -19,8 +19,8 @@ public class MatchService : IMatchService
 
     public async Task FinishMatchAsync(Guid matchId, FinishResultDto input)
     {
-        _logger.LogInformation("Starting to finish match {MatchId} with result: {Result}, winning team: {WinningTeam}",
-            matchId, input.Result, input.WinningTeam);
+        _logger.LogInformation("Starting to finish match {MatchId} with result: {Result}, winning team id: {WinningTeamId}",
+            matchId, input.Result, input.WinningTeamId);
 
         _logger.LogDebug("Finding tournament for match {MatchId}", matchId);
         var tournament = await _repository.FindByMatchIdAsync(matchId);
@@ -48,13 +48,13 @@ public class MatchService : IMatchService
 
         _logger.LogDebug("Result type parsed successfully: {ResultType}", result);
 
-        string? winner = !string.IsNullOrEmpty(input.WinningTeam)
-            ? tournament.Teams.FirstOrDefault(t => t == input.WinningTeam)
+        string? winner = !string.IsNullOrEmpty(input.WinningTeamId)
+            ? tournament.Teams.FirstOrDefault(t => t == input.WinningTeamId)
             : null;
 
-        if (!string.IsNullOrEmpty(input.WinningTeam) && winner == null)
+        if (!string.IsNullOrEmpty(input.WinningTeamId) && winner == null)
         {
-            _logger.LogWarning("Winning team '{WinningTeam}' not found in tournament teams", input.WinningTeam);
+            _logger.LogWarning("Winning team id '{WinningTeamId}' not found in tournament teams", input.WinningTeamId);
         }
 
         _logger.LogDebug("Finishing match with winner: {Winner}", winner ?? "No winner");

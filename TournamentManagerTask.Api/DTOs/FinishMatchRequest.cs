@@ -12,8 +12,8 @@ public class FinishMatchRequest
     public string Result { get; set; } = string.Empty;
 
     /// <summary>
-    /// The winning team name. Required when Result is "Winner" or "WithdrawOne". Should be null for "WithdrawBoth"
+    /// The winning team ID. Required when Result is "Winner" or "WithdrawOne". Should be null for "WithdrawBoth"
     /// </summary>
-    /// <example>Team Alpha</example>
-    public string WinningTeam { get; set; }
+    /// <example>Team 2</example>
+    public string WinningTeamId { get; set; }
 }

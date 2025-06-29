@@ -36,9 +36,9 @@ public class MatchesController : ControllerBase
     /// <response code="500">Internal server error</response>
     /// <remarks>
     /// Result types:
-    /// - "Winner": One team wins, WinningTeam must specify the winning team
-    /// - "WithdrawOne": One team withdraws, WinningTeam must specify the team that didn't withdraw
-    /// - "WithdrawBoth": Both teams withdraw, WinningTeam should be null or empty
+    /// - "Winner": One team wins, WinningTeamId must specify the winning team
+    /// - "WithdrawOne": One team withdraws, WinningTeamId must specify the team that didn't withdraw
+    /// - "WithdrawBoth": Both teams withdraw, WinningTeamId should be null or empty
     /// </remarks>
     [HttpPost("{matchId}/finish")]
     [ProducesResponseType(204)]
@@ -48,13 +48,13 @@ public class MatchesController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<IActionResult> FinishMatch(Guid matchId, [FromBody] FinishMatchRequest request)
     {
-        _logger.LogInformation("Finishing match {MatchId} with result: {Result}, winning team: {WinningTeam}",
-            matchId, request.Result, request.WinningTeam);
+        _logger.LogInformation("Finishing match {MatchId} with result: {Result}, winning team id: {WinningTeamId}",
+            matchId, request.Result, request.WinningTeamId);
 
         var result = new FinishResultDto
         {
             Result = request.Result,
-            WinningTeam = request.WinningTeam
+            WinningTeamId = request.WinningTeamId
         };
 
         await _matchService.FinishMatchAsync(matchId, result);

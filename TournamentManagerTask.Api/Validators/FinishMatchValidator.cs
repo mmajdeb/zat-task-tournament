@@ -18,14 +18,14 @@ public class FinishMatchValidator : AbstractValidator<FinishMatchRequest>
 
         When(x => x.Result == "Winner" || x.Result == "WithdrawOne", () =>
         {
-            RuleFor(x => x.WinningTeam)
-                .NotEmpty().WithMessage("WinningTeam is required for result types Winner or WithdrawOne");
+            RuleFor(x => x.WinningTeamId)
+                .NotEmpty().WithMessage("WinningTeamId is required for result types Winner or WithdrawOne");
         });
 
         When(x => x.Result == "WithdrawBoth", () =>
         {
-            RuleFor(x => x.WinningTeam)
-                .Empty().WithMessage("WinningTeam must be empty when both teams withdraw");
+            RuleFor(x => x.WinningTeamId)
+                .Empty().WithMessage("WinningTeamId must be empty when both teams withdraw");
         });
     }
 }

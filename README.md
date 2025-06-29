@@ -134,7 +134,7 @@ The API will be available at `https://localhost:5001` or `http://localhost:5000`
   ```json
   {
     "result": "Winner",
-    "winningTeam": "Team Alpha"
+    "winningTeamId": "Team 2"
   }
   ```
 - **Response:**
