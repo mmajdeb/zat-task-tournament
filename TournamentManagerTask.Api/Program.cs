@@ -34,3 +34,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// This partial class is required to enable integration testing of the Program class.
+public partial class Program { }

@@ -32,6 +32,16 @@ TournamentManagerTask/
 │   ├── Properties/
 │   ├── Validators/
 │   └── ...
+├── tests/
+│   ├── README.md
+│   └── TournamentManagerTask.Api.IntegrationTests/
+│       ├── TournamentApiIntegrationTests.cs
+│       ├── TournamentApiIntegrationTests.Logic.cs
+│       ├── TournamentApiIntegrationTests.Logic.FullTournament.cs
+│       ├── TournamentApiIntegrationTests.Logic.FullTournamentWithdrawBoth.cs
+│       ├── IntegrationTestBase.cs
+│       ├── TestData/
+│       └── ...
 └── README.md
 ```
 
@@ -146,8 +156,12 @@ The API will be available at `https://localhost:5001` or `http://localhost:5000`
 
 ---
 
+## Testing
+
+Integration tests for the API are provided in the `tests/` folder. For details on test scenarios, structure, and how to run the tests, see [`tests/README.md`](tests/README.md).
+
+---
+
 ### API Documentation
 
 - Interactive API documentation is available via Swagger UI at the root URL when running the API (e.g., [https://localhost:5001](https://localhost:5001)).
-
----

@@ -1,0 +1,12 @@
+# Format: round;teama,teamb;result;winnerId (winnerId is optional for WithdrawBoth)
+# First round: 4 matches, each between two teams
+1;Team 1,Team 2;Winner;Team 1
+1;Team 3,Team 4;WithdrawOne;Team 3
+1;Team 5,Team 6;Winner;Team 5
+1;Team 7,Team 8;WithdrawOne;Team 7
+# Second round: 2 matches, between previous winners
+2;Team 1,Team 3;Winner;Team 1
+2;Team 5,Team 7;Winner;Team 5
+# Final round: 1 match, between previous winners
+3;Team 1,Team 5;Winner;Team 1
+# The winner should be Team 1 at the end
