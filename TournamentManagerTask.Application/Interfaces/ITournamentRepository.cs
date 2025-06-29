@@ -1,4 +1,5 @@
 using TournamentManagerTask.Domain.Entities;
+using TournamentManagerTask.Domain.Enums;
 
 namespace TournamentManagerTask.Application.Interfaces;
 
@@ -8,5 +9,5 @@ public interface ITournamentRepository
     Task<Tournament?> FindByMatchIdAsync(Guid matchId);
     Task<Tournament> CreateAsync(Tournament tournament);
     Task UpdateMatchResultAsync(Guid matchId, string state, string? winner);
-    Task UpdateNextMatchTeamsAsync(Guid matchId, string? teamA, string? teamB);
+    Task UpdateNextMatchAsync(Guid matchId, string? teamA, string? teamB, string? winner, MatchState state);
 }

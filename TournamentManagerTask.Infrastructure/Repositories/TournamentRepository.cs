@@ -100,27 +100,31 @@ public class TournamentRepository : ITournamentRepository
         }
     }
 
-    public async Task UpdateNextMatchTeamsAsync(Guid matchId, string? teamA, string? teamB)
+
+    public async Task UpdateNextMatchAsync(Guid matchId, string? teamA, string? teamB, string? winner, MatchState state)
     {
-        _logger.LogDebug("Updating next match teams for match {MatchId}: TeamA={TeamA}, TeamB={TeamB}",
-            matchId, teamA, teamB);
+        _logger.LogDebug("Updating next match for match {MatchId}: TeamA={TeamA}, TeamB={TeamB}, Winner={Winner}, State={State}",
+            matchId, teamA, teamB, winner, state);
 
         var nextMatch = await _context.Matches.FindAsync(matchId);
         if (nextMatch != null)
         {
             nextMatch.TeamA = teamA;
             nextMatch.TeamB = teamB;
+            nextMatch.Winner = winner;
+            nextMatch.State = state.ToString();
 
             await _context.SaveChangesAsync();
 
-            _logger.LogDebug("Next match {MatchId} teams updated: ({NewTeamA} : {NewTeamB})",
-                matchId, teamA, teamB);
+            _logger.LogDebug("Next match {MatchId} updated: ({NewTeamA} : {NewTeamB}), State={State}, Winner={Winner}",
+                matchId, teamA, teamB, state, winner);
         }
         else
         {
             _logger.LogWarning("Next match not found for update: {MatchId}", matchId);
         }
     }
+
     private Tournament? MapToDomain(TournamentEntity? entity)
     {
         if (entity == null) return null;

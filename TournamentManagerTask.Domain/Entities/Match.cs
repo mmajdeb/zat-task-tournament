@@ -41,13 +41,10 @@ public class Match
         switch (result)
         {
             case FinishResult.Winner:
+            case FinishResult.WithdrawOne:
                 if (winningTeam == null || (winningTeam != TeamA && winningTeam != TeamB))
                     throw new DomainValidationException("Invalid winner");
                 Winner = winningTeam;
-                break;
-
-            case FinishResult.WithdrawOne:
-                Winner = !string.IsNullOrEmpty(TeamA) && string.IsNullOrEmpty(TeamB) ? TeamA : TeamB;
                 break;
 
             case FinishResult.WithdrawBoth:
@@ -63,6 +60,17 @@ public class Match
                 NextMatch.AssignTeamA(Winner);
             else
                 NextMatch.AssignTeamB(Winner);
+        }
+        // Handle WithdrawBoth edge case: if both teams withdraw, and next match has only one team, auto-finish next match
+        if (result == FinishResult.WithdrawBoth && NextMatch != null)
+        {
+            var automaticallyWinningTeam = (!string.IsNullOrEmpty(NextMatch.TeamA) && string.IsNullOrEmpty(NextMatch.TeamB)) ? NextMatch.TeamA :
+                               (string.IsNullOrEmpty(NextMatch.TeamA) && !string.IsNullOrEmpty(NextMatch.TeamB)) ? NextMatch.TeamB : null;
+
+            if (!string.IsNullOrEmpty(automaticallyWinningTeam) && NextMatch.State != MatchState.Finished)
+            {
+                NextMatch.Finish(FinishResult.WithdrawOne, automaticallyWinningTeam);
+            }
         }
     }
 
